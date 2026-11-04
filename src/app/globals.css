@@ -1,0 +1,167 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-primary: #ffffff;
+  --text-primary: #1e293b;
+  --bg-secondary: #f8fafc;
+  --border-color: #cbd5e1;
+  --accent-blue: #0284c7;
+  --palette-answered: #0f172a;
+  --palette-current: #0284c7;
+}
+
+/* Theme 1: Standard (Black on White) */
+body.theme-standard {
+  --bg-primary: #ffffff;
+  --text-primary: #1e293b;
+  --bg-secondary: #f1f5f9;
+  --bg-card: #ffffff;
+  --border-color: #cbd5e1;
+  --accent-color: #0369a1;
+  --hl-yellow: #fef08a;
+  --hl-yellow-text: #713f12;
+  --hl-blue: #bae6fd;
+  --hl-blue-text: #0369a1;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+/* Theme 2: White on Black */
+body.theme-dark {
+  --bg-primary: #121212;
+  --text-primary: #f1f5f9;
+  --bg-secondary: #1e1e1e;
+  --bg-card: #181818;
+  --border-color: #3f3f46;
+  --accent-color: #38bdf8;
+  --hl-yellow: #ca8a04;
+  --hl-yellow-text: #ffffff;
+  --hl-blue: #0284c7;
+  --hl-blue-text: #ffffff;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+/* Theme 3: Yellow on Black (Official IELTS High Contrast) */
+body.theme-yellow {
+  --bg-primary: #000000;
+  --text-primary: #ffff00;
+  --bg-secondary: #141414;
+  --bg-card: #0a0a0a;
+  --border-color: #ffff00;
+  --accent-color: #ffff00;
+  --hl-yellow: #4d4d00;
+  --hl-yellow-text: #ffffff;
+  --hl-blue: #003366;
+  --hl-blue-text: #ffffff;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+/* Font Sizes */
+body.font-standard {
+  font-size: 15px;
+  line-height: 1.6;
+}
+body.font-large {
+  font-size: 17.5px;
+  line-height: 1.7;
+}
+body.font-extralarge {
+  font-size: 20px;
+  line-height: 1.8;
+}
+
+/* Highlighted text spans */
+.ielts-hl-yellow {
+  background-color: #fef08a;
+  color: #713f12;
+  border-radius: 2px;
+  padding: 0 2px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+body.theme-dark .ielts-hl-yellow {
+  background-color: #854d0e;
+  color: #fef08a;
+}
+body.theme-yellow .ielts-hl-yellow {
+  background-color: #ffff00;
+  color: #000000;
+}
+
+.ielts-hl-blue {
+  background-color: #bae6fd;
+  color: #0369a1;
+  border-radius: 2px;
+  padding: 0 2px;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.15s ease;
+}
+body.theme-dark .ielts-hl-blue {
+  background-color: #0369a1;
+  color: #bae6fd;
+}
+body.theme-yellow .ielts-hl-blue {
+  background-color: #38bdf8;
+  color: #000000;
+}
+
+/* User Selection Color */
+::selection {
+  background: #cbd5e1;
+  color: #0f172a;
+}
+body.theme-dark ::selection {
+  background: #475569;
+  color: #ffffff;
+}
+body.theme-yellow ::selection {
+  background: #ffff00;
+  color: #000000;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+}
+::-webkit-scrollbar-thumb {
+  background: #94a3b8;
+  border-radius: 4px;
+}
+body.theme-dark ::-webkit-scrollbar-thumb,
+body.theme-yellow ::-webkit-scrollbar-thumb {
+  background: #52525b;
+}
+
+/* Draggable divider handle */
+.drag-divider {
+  width: 8px;
+  cursor: col-resize;
+  background-color: #cbd5e1;
+  transition: background-color 0.15s;
+  user-select: none;
+}
+.drag-divider:hover,
+.drag-divider:active {
+  background-color: #0284c7;
+}
+body.theme-dark .drag-divider {
+  background-color: #3f3f46;
+}
+body.theme-dark .drag-divider:hover {
+  background-color: #38bdf8;
+}
+body.theme-yellow .drag-divider {
+  background-color: #333300;
+}
+body.theme-yellow .drag-divider:hover {
+  background-color: #ffff00;
+}
