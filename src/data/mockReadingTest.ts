@@ -52,7 +52,17 @@ export const mockReadingExam: IELTSExam = {
           prompt: 'Archaeologists expected to find ancient Roman ships when they first examined the excavation site at Pisa in 1998.',
           correctAnswer: 'FALSE',
           explanation: 'Paragraph 1 states archeologists rushed to the site "expecting to find ordinary remnants of medieval foundations", not Roman ships.',
-          evidenceSentence: 'Archeologists rushed to the site, expecting to find ordinary remnants of medieval foundations.'
+          evidenceSentence: 'Archeologists rushed to the site, expecting to find ordinary remnants of medieval foundations.',
+          evidenceSentenceId: 'p1-1',
+          errorTag: 'scanning_oversight',
+          paraphrasePairs: [
+            { questionKeyword: 'expected to find ancient Roman ships', passageKeyword: 'expecting to find ordinary remnants of medieval foundations' },
+            { questionKeyword: 'first examined the excavation site', passageKeyword: 'rushed to the site' }
+          ],
+          distractorExplanations: {
+            'TRUE': 'Thông tin trong bài đối lập trực tiếp: các nhà khảo cổ chỉ kỳ vọng tìm thấy móng thời Trung cổ, không phải tàu La Mã cổ đại.',
+            'NOT GIVEN': 'Thông tin có xuất hiện rõ ràng trong bài, không phải không được đề cập.'
+          }
         },
         {
           id: 'q2',
@@ -62,7 +72,15 @@ export const mockReadingExam: IELTSExam = {
           prompt: 'The ships discovered at San Rossore were all wrecked during a single catastrophic flood.',
           correctAnswer: 'FALSE',
           explanation: 'Paragraph 2 mentions the ships sank "between the second century BC and the fifth century AD" and "Over several centuries, cataclysmic floods struck the harbor", indicating multiple floods over hundreds of years.',
-          evidenceSentence: 'Radiocarbon dating and numismatic analysis revealed that the ships sank between the second century BC and the fifth century AD.'
+          evidenceSentence: 'Radiocarbon dating and numismatic analysis revealed that the ships sank between the second century BC and the fifth century AD.',
+          evidenceSentenceId: 'p1-2',
+          errorTag: 'scanning_oversight',
+          paraphrasePairs: [
+            { questionKeyword: 'during a single catastrophic flood', passageKeyword: 'Over several centuries, cataclysmic floods struck the harbor' }
+          ],
+          distractorExplanations: {
+            'TRUE': 'Bài đọc nêu rõ tai nạn diễn ra rải rác qua nhiều thế kỷ (từ thế kỷ 2 TCN đến thế kỷ 5 SCN), không phải trong một trận lũ duy nhất.'
+          }
         },
         {
           id: 'q3',
@@ -72,7 +90,16 @@ export const mockReadingExam: IELTSExam = {
           prompt: 'The lack of oxygen in the mud helped protect the wooden vessels from biological decay.',
           correctAnswer: 'TRUE',
           explanation: 'Paragraph 2 states the ships were sealed in "anaerobic sediments that arrested biological decay". Anaerobic means without oxygen.',
-          evidenceSentence: 'battering them into the mud, and sealing them in anaerobic sediments that arrested biological decay.'
+          evidenceSentence: 'battering them into the mud, and sealing them in anaerobic sediments that arrested biological decay.',
+          evidenceSentenceId: 'p1-2',
+          errorTag: 'lexical_gap',
+          paraphrasePairs: [
+            { questionKeyword: 'lack of oxygen', passageKeyword: 'anaerobic sediments (trầm tích yếm khí / kị khí)' },
+            { questionKeyword: 'helped protect ... from biological decay', passageKeyword: 'arrested biological decay (ngăn chặn sự phân hủy sinh học)' }
+          ],
+          distractorExplanations: {
+            'FALSE': 'Bài đọc khẳng định chính xác môi trường trầm tích yếm khí đã ngăn chặn phân hủy sinh học.'
+          }
         },
         {
           id: 'q4',
@@ -82,7 +109,13 @@ export const mockReadingExam: IELTSExam = {
           prompt: 'The ship named Alkedo was the largest vessel ever constructed in the Roman Empire.',
           correctAnswer: 'NOT GIVEN',
           explanation: 'Paragraph 3 mentions Alkedo was an 18-meter-long cargo vessel with a carved lion figurehead, but gives no indication whether it was the largest vessel ever built in the empire.',
-          evidenceSentence: 'Among the vessels recovered was an 18-meter-long cargo vessel designated "Alkedo" (the Gull), built of oak and pine, which carried an intact carved figurehead of a roaring lion.'
+          evidenceSentence: 'Among the vessels recovered was an 18-meter-long cargo vessel designated "Alkedo" (the Gull), built of oak and pine, which carried an intact carved figurehead of a roaring lion.',
+          evidenceSentenceId: 'p1-3',
+          errorTag: 'overthinking_logic',
+          distractorExplanations: {
+            'TRUE': 'Bẫy suy diễn: Đoạn văn chỉ miêu tả tàu dài 18m, hoàn toàn không so sánh với kỷ lục các con tàu khác của đế chế La Mã.',
+            'FALSE': 'Bài không nói nó là lớn nhất, nhưng cũng không phủ định điều đó $\\rightarrow$ NOT GIVEN.'
+          }
         },
         {
           id: 'q5',
@@ -92,7 +125,13 @@ export const mockReadingExam: IELTSExam = {
           prompt: 'Amphorae found on Nave I verified commercial connections between Italy, Spain, and North Africa.',
           correctAnswer: 'TRUE',
           explanation: 'Paragraph 3 states Nave I carried amphorae from modern-day Spain and Tunisia, providing empirical proof of trading networks spanning North Africa, Iberia, and the Italian peninsula.',
-          evidenceSentence: 'The sheer variety of goods provides unprecedented empirical proof of extensive trans-Mediterranean trading networks spanning North Africa, Iberia, and the Italian peninsula.'
+          evidenceSentence: 'The sheer variety of goods provides unprecedented empirical proof of extensive trans-Mediterranean trading networks spanning North Africa, Iberia, and the Italian peninsula.',
+          evidenceSentenceId: 'p1-3',
+          errorTag: 'lexical_gap',
+          paraphrasePairs: [
+            { questionKeyword: 'verified commercial connections', passageKeyword: 'unprecedented empirical proof of extensive trading networks' },
+            { questionKeyword: 'Spain and North Africa', passageKeyword: 'Iberia, and North Africa (Tunisia)' }
+          ]
         },
         {
           id: 'q6',

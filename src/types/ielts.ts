@@ -28,6 +28,12 @@ export interface QuestionOption {
   text: string;
 }
 
+export interface ParaphrasePair {
+  questionKeyword: string;
+  passageKeyword: string;
+  notes?: string;
+}
+
 export interface Question {
   id: string;
   number: number; // 1 to 40
@@ -37,19 +43,32 @@ export interface Question {
   instruction?: string;
   options?: QuestionOption[];
   maxSelections?: number; // e.g. 2 for "Choose TWO letters"
-  correctAnswer: string | string[]; // Can be single answer or array (for multi-choice or gap fills)
+  correctAnswer: string | string[]; // Can be single answer or array
   acceptableAnswers?: string[]; // Extra valid synonyms/spellings
   explanation: string;
   evidenceSentence?: string; // Exact quote from passage for solution view
-  headingList?: { id: string; roman: string; text: string }[]; // For matching headings
-  paragraphRef?: string; // e.g. "Paragraph A"
-  gapLabel?: string; // for inline inputs e.g. "(1) ________"
+  evidenceSentenceId?: string; // Anchor ID to scroll & highlight in passage
+  paraphrasePairs?: ParaphrasePair[]; // Matching keywords in question vs passage
+  distractorExplanations?: Record<string, string>; // Why options A, B, C, D are wrong
+  errorTag?: 'lexical_gap' | 'overthinking_logic' | 'scanning_oversight' | 'acoustic_distractor';
+  headingList?: { id: string; roman: string; text: string }[];
+  paragraphRef?: string;
+  gapLabel?: string;
+}
+
+export interface VocabAnnotation {
+  term: string;
+  ipa?: string;
+  meaningVi: string;
+  level?: 'B2' | 'C1' | 'C2';
+  exampleSentence?: string;
 }
 
 export interface Paragraph {
   id: string;
   label?: string; // e.g., "A", "B", "C"
   text: string;
+  vocabList?: VocabAnnotation[];
 }
 
 export interface Part {
@@ -63,7 +82,7 @@ export interface Part {
     subtitle?: string;
     paragraphs: Paragraph[];
   };
-  audioUrl?: string; // For Listening tests
+  audioUrl?: string;
   audioTitle?: string;
   questions: Question[];
 }
@@ -73,7 +92,7 @@ export interface IELTSExam {
   title: string;
   module: ExamModule;
   category: 'Academic' | 'General Training';
-  durationMinutes: number; // 60 for Reading/Writing, 30-40 for Listening
+  durationMinutes: number;
   parts: Part[];
   writingPrompts?: {
     task1: {
@@ -99,6 +118,10 @@ export interface QuestionScoreResult {
   part: number;
   explanation: string;
   evidenceSentence?: string;
+  evidenceSentenceId?: string;
+  paraphrasePairs?: ParaphrasePair[];
+  distractorExplanations?: Record<string, string>;
+  errorTag?: 'lexical_gap' | 'overthinking_logic' | 'scanning_oversight' | 'acoustic_distractor';
 }
 
 export interface ExamScoreSummary {

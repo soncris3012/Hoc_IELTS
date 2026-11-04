@@ -13,6 +13,8 @@ import {
   VolumeX,
   Play,
   Pause,
+  Maximize2,
+  Minimize2,
 } from 'lucide-react';
 import { useExamStore } from '@/lib/store';
 import { HelpModal } from './HelpModal';
@@ -34,10 +36,12 @@ export const TopBar: React.FC = () => {
   const [isHelpOpen, setIsHelpOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isSubmitConfirmOpen, setIsSubmitConfirmOpen] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   // Audio state for Listening mode
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
+  const [volume, setVolume] = useState(0.8);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   // Timer interval
@@ -63,6 +67,7 @@ export const TopBar: React.FC = () => {
       audioRef.current.pause();
       setIsPlaying(false);
     } else {
+      audioRef.current.volume = isMuted ? 0 : volume;
       audioRef.current.play().catch(console.error);
       setIsPlaying(true);
     }
@@ -72,6 +77,30 @@ export const TopBar: React.FC = () => {
     if (!audioRef.current) return;
     audioRef.current.muted = !isMuted;
     setIsMuted(!isMuted);
+  };
+
+  const handleVolumeChange = (newVol: number) => {
+    setVolume(newVol);
+    if (audioRef.current) {
+      audioRef.current.volume = newVol;
+    }
+    if (isMuted && newVol > 0) {
+      setIsMuted(false);
+      if (audioRef.current) audioRef.current.muted = false;
+    }
+  };
+
+  // Toggle Fullscreen
+  const toggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(console.error);
+      setIsFullscreen(true);
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen().catch(console.error);
+      }
+      setIsFullscreen(false);
+    }
   };
 
   return (
@@ -100,7 +129,7 @@ export const TopBar: React.FC = () => {
         {/* Center: Audio Player (if Listening) or Dynamic Timer */}
         <div className="flex items-center gap-4">
           {exam.module === 'listening' && (
-            <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-100 dark:bg-zinc-800 border border-slate-300 dark:border-zinc-700 text-xs">
+            <div className="hidden md:flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-slate-100 dark:bg-zinc-800 border border-slate-300 dark:border-zinc-700 text-xs">
               <audio
                 ref={audioRef}
                 src="https://actions.google.com/sounds/v1/ambiences/rainforest_birds.ogg"
@@ -115,12 +144,24 @@ export const TopBar: React.FC = () => {
               <span className="font-semibold text-slate-700 dark:text-zinc-200">
                 {isPlaying ? 'Exam Audio Playing' : 'Exam Audio Ready'}
               </span>
-              <button
-                onClick={toggleMute}
-                className="p-1 text-slate-500 hover:text-slate-800 dark:hover:text-zinc-200"
-              >
-                {isMuted ? <VolumeX className="w-4 h-4 text-rose-500" /> : <Volume2 className="w-4 h-4" />}
-              </button>
+              <div className="flex items-center gap-1.5 pl-2 border-l border-slate-300 dark:border-zinc-700">
+                <button
+                  onClick={toggleMute}
+                  className="p-1 text-slate-500 hover:text-slate-800 dark:hover:text-zinc-200"
+                >
+                  {isMuted ? <VolumeX className="w-4 h-4 text-rose-500" /> : <Volume2 className="w-4 h-4" />}
+                </button>
+                <input
+                  type="range"
+                  min="0"
+                  max="1"
+                  step="0.05"
+                  value={isMuted ? 0 : volume}
+                  onChange={(e) => handleVolumeChange(parseFloat(e.target.value))}
+                  className="w-16 h-1.5 accent-sky-600 cursor-pointer"
+                  title="Adjust audio volume"
+                />
+              </div>
             </div>
           )}
 
@@ -149,8 +190,16 @@ export const TopBar: React.FC = () => {
           </div>
         </div>
 
-        {/* Right Actions: Help, Settings, Submit */}
+        {/* Right Actions: Fullscreen, Help, Settings, Submit */}
         <div className="flex items-center gap-2">
+          <button
+            onClick={toggleFullscreen}
+            title={isFullscreen ? 'Exit Fullscreen' : 'Enter Fullscreen (Exam Mode)'}
+            className="p-2 rounded-md border border-slate-200 dark:border-zinc-700 text-slate-700 dark:text-zinc-300 hover:bg-slate-100 dark:hover:bg-zinc-800 transition"
+          >
+            {isFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
+          </button>
+
           <button
             onClick={() => setIsHelpOpen(true)}
             title="Examination Help & Shortcuts"

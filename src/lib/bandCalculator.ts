@@ -203,6 +203,10 @@ export function gradeExam(
         part: part.partNumber,
         explanation: q.explanation,
         evidenceSentence: q.evidenceSentence,
+        evidenceSentenceId: q.evidenceSentenceId,
+        paraphrasePairs: q.paraphrasePairs,
+        distractorExplanations: q.distractorExplanations,
+        errorTag: q.errorTag,
       });
     });
   });
