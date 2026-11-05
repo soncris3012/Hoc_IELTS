@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { useExamStore } from '@/lib/store';
+import { QuestionScoreResult } from '@/types/ielts';
+import { StepByStepBuilderModal } from './StepByStepBuilderModal';
 import {
   Trophy,
   CheckCircle,
@@ -26,6 +28,7 @@ export const ReviewResultDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'solutions' | 'mistake_vault' | 'remedial_drill'>('solutions');
   const [drillAnswers, setDrillAnswers] = useState<Record<number, string>>({});
   const [drillSubmitted, setDrillSubmitted] = useState(false);
+  const [builderTarget, setBuilderTarget] = useState<QuestionScoreResult | null>(null);
 
   useEffect(() => {
     try {
@@ -473,6 +476,24 @@ export const ReviewResultDashboard: React.FC = () => {
                               ))}
                             </div>
                           )}
+
+                          {/* YouPass Builder Action Button */}
+                          <div className="pt-3 border-t border-slate-100 dark:border-zinc-800 flex items-center justify-between">
+                            <span className="text-[11px] text-slate-400 hidden sm:inline">
+                              Học sâu cơ chế ra đề & bẫy nhiễu chuẩn YouPass PRO
+                            </span>
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setBuilderTarget(item);
+                              }}
+                              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 text-white font-bold text-xs shadow-xs transition"
+                            >
+                              <Zap className="w-3.5 h-3.5" />
+                              <span>YouPass Builder: Xem hướng dẫn 4 bước giải câu này</span>
+                            </button>
+                          </div>
                         </div>
                       )}
                     </div>
@@ -526,6 +547,16 @@ export const ReviewResultDashboard: React.FC = () => {
                             </span>
                           </div>
                           <p className="text-slate-600 dark:text-zinc-300">{item.explanation}</p>
+                          <div className="pt-1 flex justify-end">
+                            <button
+                              type="button"
+                              onClick={() => setBuilderTarget(item)}
+                              className="text-[11px] font-bold text-orange-600 dark:text-orange-400 hover:underline flex items-center gap-1"
+                            >
+                              <Zap className="w-3 h-3" />
+                              <span>Mở YouPass Builder 4 bước</span>
+                            </button>
+                          </div>
                         </div>
                       ))}
                     </div>
@@ -631,6 +662,12 @@ export const ReviewResultDashboard: React.FC = () => {
             </button>
           </div>
         </div>
+
+        {/* YouPass Step-by-Step Builder Modal */}
+        <StepByStepBuilderModal
+          result={builderTarget}
+          onClose={() => setBuilderTarget(null)}
+        />
       </div>
     </div>
   );

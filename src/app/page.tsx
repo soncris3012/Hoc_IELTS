@@ -12,9 +12,11 @@ import { HighlightMenu } from '@/components/exam/HighlightMenu';
 import { StickyNoteModal } from '@/components/exam/StickyNoteModal';
 import { ReviewResultDashboard } from '@/components/exam/ReviewResultDashboard';
 import { CandidateConfirmModal } from '@/components/exam/CandidateConfirmModal';
+import { VocabLookupModal } from '@/components/exam/VocabLookupModal';
+import { GoalSettingModal } from '@/components/exam/GoalSettingModal';
 import { mockReadingExam } from '@/data/mockReadingTest';
 import { mockListeningExam } from '@/data/mockListeningTest';
-import { BookOpen, Headphones, PenTool, Database, Mic, ShieldAlert } from 'lucide-react';
+import { BookOpen, Headphones, PenTool, Database, Mic, ShieldAlert, BookMarked, Target, Flame } from 'lucide-react';
 
 export default function ExamRoomPage() {
   const {
@@ -25,9 +27,23 @@ export default function ExamRoomPage() {
     loadExam,
     currentQuestionNumber,
     setCurrentQuestion,
+    vocabList,
+    userGoal,
   } = useExamStore();
 
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+  const [isGoalModalOpen, setIsGoalModalOpen] = useState(false);
+
+  // Calculate days left
+  const calculateDaysLeft = (dateStr?: string) => {
+    if (!dateStr) return null;
+    const target = new Date(dateStr).getTime();
+    const now = new Date().getTime();
+    const diff = Math.ceil((target - now) / (1000 * 60 * 60 * 24));
+    return diff > 0 ? diff : 0;
+  };
+
+  const daysLeft = calculateDaysLeft(userGoal.examDate);
 
   // Apply theme & font size classes to body element
   useEffect(() => {
@@ -75,6 +91,25 @@ export default function ExamRoomPage() {
         </div>
 
         <div className="flex items-center gap-2 sm:gap-3">
+          {/* Target Band & Exam Date Countdown Button (YouPass Goal) */}
+          <button
+            onClick={() => setIsGoalModalOpen(true)}
+            className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-slate-800 hover:bg-slate-700 border border-slate-700 text-sky-300 font-bold transition text-[10px] sm:text-[11px]"
+            title="Bấm để chỉnh sửa Mục tiêu Band & Ngày thi"
+          >
+            <Target className="w-3 h-3 text-sky-400" />
+            <span>Target: {userGoal.targetBand.toFixed(1)}</span>
+            {daysLeft !== null && (
+              <span className="text-slate-400 font-normal hidden md:inline">
+                ({daysLeft}d left)
+              </span>
+            )}
+            <span className="flex items-center gap-0.5 text-orange-400">
+              <Flame className="w-2.5 h-2.5" />
+              <span>{userGoal.streakDays}d</span>
+            </span>
+          </button>
+
           <button
             onClick={() => {
               loadExam(mockReadingExam);
@@ -105,6 +140,19 @@ export default function ExamRoomPage() {
             <span>Listening</span>
           </button>
 
+          {/* Sổ Từ Vựng (YouPass Vocab Book) */}
+          <Link
+            href="/vocab"
+            className="flex items-center gap-1 px-2 py-0.5 rounded text-orange-400 hover:text-orange-300 hover:bg-slate-800 transition font-medium"
+            title="Sổ Từ Vựng cá nhân & Flashcards"
+          >
+            <BookMarked className="w-3 h-3" />
+            <span>Sổ Từ</span>
+            <span className="px-1 py-0.2 rounded-full bg-orange-600 text-white text-[9px] font-bold">
+              {vocabList.length}
+            </span>
+          </Link>
+
           <Link
             href="/dictation"
             className="flex items-center gap-1 px-2 py-0.5 rounded text-emerald-400 hover:text-emerald-300 hover:bg-slate-800 transition font-medium"
@@ -126,7 +174,7 @@ export default function ExamRoomPage() {
             className="flex items-center gap-1 px-2 py-0.5 rounded text-amber-300 hover:text-amber-200 hover:bg-slate-800 transition font-medium"
           >
             <Database className="w-3 h-3" />
-            <span className="hidden sm:inline">Import Tests</span>
+            <span className="hidden sm:inline">Import</span>
           </Link>
 
           <button
@@ -162,6 +210,15 @@ export default function ExamRoomPage() {
       <CandidateConfirmModal
         isOpen={isConfirmModalOpen}
         onStart={() => setIsConfirmModalOpen(false)}
+      />
+
+      {/* YouPass Vocab Book Lookup Modal */}
+      <VocabLookupModal />
+
+      {/* Target Band & Exam Date Goal Modal */}
+      <GoalSettingModal
+        isOpen={isGoalModalOpen}
+        onClose={() => setIsGoalModalOpen(false)}
       />
     </div>
   );

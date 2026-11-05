@@ -53,6 +53,14 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
       border: 'border-yellow-400',
       desc: 'Yellow text on black (Official IELTS Accessibility)',
     },
+    {
+      id: 'youpass_orange',
+      label: 'YouPass Signature Orange (Modern Learning)',
+      bg: 'bg-[#fffaf5]',
+      text: 'text-[#1e293b]',
+      border: 'border-[#ea580c]',
+      desc: 'Warm cream & signature orange brand theme for relaxed study',
+    },
   ];
 
   return (

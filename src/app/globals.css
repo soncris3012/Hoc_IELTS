@@ -60,6 +60,22 @@ body.theme-yellow {
   color: var(--text-primary);
 }
 
+/* Theme 4: YouPass Signature Orange (Warm Learning Brand) */
+body.theme-youpass_orange {
+  --bg-primary: #fffaf5;
+  --text-primary: #1e293b;
+  --bg-secondary: #fff1e5;
+  --bg-card: #ffffff;
+  --border-color: #fed7aa;
+  --accent-color: #ea580c;
+  --hl-yellow: #fde047;
+  --hl-yellow-text: #854d0e;
+  --hl-blue: #ffedd5;
+  --hl-blue-text: #c2410c;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
 /* Font Sizes */
 body.font-standard {
   font-size: 15px;
@@ -91,6 +107,10 @@ body.theme-yellow .ielts-hl-yellow {
   background-color: #ffff00;
   color: #000000;
 }
+body.theme-youpass_orange .ielts-hl-yellow {
+  background-color: #fef08a;
+  color: #78350f;
+}
 
 .ielts-hl-blue {
   background-color: #bae6fd;
@@ -109,6 +129,10 @@ body.theme-yellow .ielts-hl-blue {
   background-color: #38bdf8;
   color: #000000;
 }
+body.theme-youpass_orange .ielts-hl-blue {
+  background-color: #fed7aa;
+  color: #9a3412;
+}
 
 /* User Selection Color */
 ::selection {
@@ -122,6 +146,10 @@ body.theme-dark ::selection {
 body.theme-yellow ::selection {
   background: #ffff00;
   color: #000000;
+}
+body.theme-youpass_orange ::selection {
+  background: #fdba74;
+  color: #7c2d12;
 }
 
 /* Custom Scrollbar */

@@ -9,8 +9,31 @@ export type QuestionType =
   | 'matching_headings'
   | 'matching_information';
 
-export type ExamTheme = 'standard' | 'dark' | 'yellow';
+export type ExamTheme = 'standard' | 'dark' | 'yellow' | 'youpass_orange';
 export type FontSize = 'standard' | 'large' | 'extralarge';
+
+export interface StepByStepGuide {
+  step1_keywords: string[];
+  step2_context: string;
+  step3_trap_analysis: string;
+  step4_solution_summary: string;
+}
+
+export interface VocabItem {
+  id: string;
+  word: string;
+  ipa?: string;
+  meaningVi: string;
+  contextSentence?: string;
+  status: 'unlearned' | 'learning' | 'mastered'; // Chưa thuộc, Nhớ sơ, Đã thuộc
+  addedAt: number;
+}
+
+export interface UserGoal {
+  targetBand: number; // e.g. 7.5
+  examDate?: string; // YYYY-MM-DD
+  streakDays: number;
+}
 
 export interface TextHighlight {
   id: string;
@@ -48,6 +71,7 @@ export interface Question {
   explanation: string;
   evidenceSentence?: string; // Exact quote from passage for solution view
   evidenceSentenceId?: string; // Anchor ID to scroll & highlight in passage
+  builderGuide?: StepByStepGuide; // Step-by-step problem solver (YouPass Listening/Reading Builder)
   paraphrasePairs?: ParaphrasePair[]; // Matching keywords in question vs passage
   distractorExplanations?: Record<string, string>; // Why options A, B, C, D are wrong
   errorTag?: 'lexical_gap' | 'overthinking_logic' | 'scanning_oversight' | 'acoustic_distractor';
@@ -111,6 +135,7 @@ export interface IELTSExam {
 
 export interface QuestionScoreResult {
   questionNumber: number;
+  prompt?: string;
   userAnswer: string | string[] | undefined;
   correctAnswer: string | string[];
   isCorrect: boolean;
@@ -119,6 +144,7 @@ export interface QuestionScoreResult {
   explanation: string;
   evidenceSentence?: string;
   evidenceSentenceId?: string;
+  builderGuide?: StepByStepGuide;
   paraphrasePairs?: ParaphrasePair[];
   distractorExplanations?: Record<string, string>;
   errorTag?: 'lexical_gap' | 'overthinking_logic' | 'scanning_oversight' | 'acoustic_distractor';

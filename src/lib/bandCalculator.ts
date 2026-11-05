@@ -196,6 +196,7 @@ export function gradeExam(
 
       detailedResults.push({
         questionNumber: q.number,
+        prompt: q.prompt,
         userAnswer: userAns,
         correctAnswer: q.correctAnswer,
         isCorrect,
@@ -204,6 +205,7 @@ export function gradeExam(
         explanation: q.explanation,
         evidenceSentence: q.evidenceSentence,
         evidenceSentenceId: q.evidenceSentenceId,
+        builderGuide: q.builderGuide,
         paraphrasePairs: q.paraphrasePairs,
         distractorExplanations: q.distractorExplanations,
         errorTag: q.errorTag,

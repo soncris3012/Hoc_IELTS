@@ -1,9 +1,56 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import { IELTSExam, ExamTheme, FontSize, TextHighlight, ExamScoreSummary } from '@/types/ielts';
+import {
+  IELTSExam,
+  ExamTheme,
+  FontSize,
+  TextHighlight,
+  ExamScoreSummary,
+  VocabItem,
+  UserGoal,
+} from '@/types/ielts';
 import { mockReadingExam } from '@/data/mockReadingTest';
 import { gradeExam } from '@/lib/bandCalculator';
 import { saveTestAttempt } from '@/lib/supabase';
+
+const initialVocabList: VocabItem[] = [
+  {
+    id: 'voc_1',
+    word: 'anaerobic',
+    ipa: '/ˌæn.eəˈrəʊ.bɪk/',
+    meaningVi: 'Hiếu khí / kỵ khí (môi trường không có khí oxy)',
+    contextSentence: 'Submerged timber survived due to anaerobic sediment preventing bacterial decay.',
+    status: 'learning',
+    addedAt: Date.now() - 86400000 * 2,
+  },
+  {
+    id: 'voc_2',
+    word: 'dendrochronology',
+    ipa: '/ˌden.drəʊ.krəˈnɒl.ə.dʒi/',
+    meaningVi: 'Phương pháp định tuổi cây qua vòng sinh trưởng (niên luân học)',
+    contextSentence: 'Dendrochronology enabled archaeologists to date ship timbers with seasonal precision.',
+    status: 'unlearned',
+    addedAt: Date.now() - 86400000,
+  },
+  {
+    id: 'voc_3',
+    word: 'preservation',
+    ipa: '/ˌprez.əˈveɪ.ʃən/',
+    meaningVi: 'Sự bảo tồn, giữ gìn nguyên trạng',
+    contextSentence: 'The exceptional preservation of Roman hull planks baffled maritime experts.',
+    status: 'mastered',
+    addedAt: Date.now() - 86400000 * 4,
+  },
+  {
+    id: 'voc_4',
+    word: 'distractor',
+    ipa: '/dɪˈstræk.tər/',
+    meaningVi: 'Phương án gây nhiễu, bẫy trắc nghiệm trong bài thi',
+    contextSentence: 'Recognizing distractor options is critical to securing Band 8.0+ in IELTS Reading.',
+    status: 'mastered',
+    addedAt: Date.now() - 86400000 * 5,
+  },
+];
 
 interface ExamState {
   candidateName: string;
@@ -22,6 +69,11 @@ interface ExamState {
   isSubmitted: boolean;
   scoreSummary: ExamScoreSummary | null;
   activeNoteModal: { highlightId: string; text: string; initialNote?: string } | null;
+
+  // YouPass Feature Parity: Vocabulary Book & User Goals
+  vocabList: VocabItem[];
+  vocabModal: { word: string; defaultMeaning?: string; contextSentence?: string } | null;
+  userGoal: UserGoal;
 
   // Actions
   setCandidateInfo: (name: string, number: string) => void;
@@ -42,6 +94,15 @@ interface ExamState {
   submitExam: () => Promise<void>;
   retakeExam: () => void;
   loadExam: (newExam: IELTSExam) => void;
+
+  // Vocab Actions
+  addVocab: (item: Omit<VocabItem, 'id' | 'addedAt'>) => void;
+  updateVocabStatus: (id: string, status: 'unlearned' | 'learning' | 'mastered') => void;
+  removeVocab: (id: string) => void;
+  setVocabModal: (modal: { word: string; defaultMeaning?: string; contextSentence?: string } | null) => void;
+
+  // Goal Actions
+  setUserGoal: (goal: Partial<UserGoal>) => void;
 }
 
 export const useExamStore = create<ExamState>()(
@@ -63,6 +124,14 @@ export const useExamStore = create<ExamState>()(
       isSubmitted: false,
       scoreSummary: null,
       activeNoteModal: null,
+
+      vocabList: initialVocabList,
+      vocabModal: null,
+      userGoal: {
+        targetBand: 7.5,
+        examDate: '2026-12-15',
+        streakDays: 3,
+      },
 
       setCandidateInfo: (name, number) =>
         set({ candidateName: name, candidateNumber: number }),
@@ -206,6 +275,38 @@ export const useExamStore = create<ExamState>()(
           activeNoteModal: null,
         });
       },
+
+      addVocab: (item) => {
+        const id = `voc_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
+        const newItem: VocabItem = {
+          ...item,
+          id,
+          addedAt: Date.now(),
+        };
+        set((state) => ({
+          vocabList: [newItem, ...state.vocabList.filter((v) => v.word.toLowerCase() !== item.word.toLowerCase())],
+        }));
+      },
+
+      updateVocabStatus: (id, status) => {
+        set((state) => ({
+          vocabList: state.vocabList.map((v) => (v.id === id ? { ...v, status } : v)),
+        }));
+      },
+
+      removeVocab: (id) => {
+        set((state) => ({
+          vocabList: state.vocabList.filter((v) => v.id !== id),
+        }));
+      },
+
+      setVocabModal: (vocabModal) => set({ vocabModal }),
+
+      setUserGoal: (goalUpdate) => {
+        set((state) => ({
+          userGoal: { ...state.userGoal, ...goalUpdate },
+        }));
+      },
     }),
     {
       name: 'hoc_ielts_exam_store_v1',
@@ -226,6 +327,8 @@ export const useExamStore = create<ExamState>()(
         splitRatio: state.splitRatio,
         isSubmitted: state.isSubmitted,
         scoreSummary: state.scoreSummary,
+        vocabList: state.vocabList,
+        userGoal: state.userGoal,
       }),
     }
   )

@@ -1,11 +1,11 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Highlighter, StickyNote } from 'lucide-react';
+import { Highlighter, StickyNote, BookMarked } from 'lucide-react';
 import { useExamStore } from '@/lib/store';
 
 export const HighlightMenu: React.FC = () => {
-  const { addHighlight, setActiveNoteModal, currentPartNumber } = useExamStore();
+  const { addHighlight, setActiveNoteModal, setVocabModal, currentPartNumber } = useExamStore();
   const [coords, setCoords] = useState<{ x: number; y: number } | null>(null);
   const [selectedText, setSelectedText] = useState<string>('');
 
@@ -85,6 +85,15 @@ export const HighlightMenu: React.FC = () => {
     window.getSelection()?.removeAllRanges();
   };
 
+  const handleLookup = () => {
+    setVocabModal({
+      word: selectedText.replace(/^[.,;:!?"'()\[\]{}]+|[.,;:!?"'()\[\]{}]+$/g, ''),
+      contextSentence: selectedText,
+    });
+    setCoords(null);
+    window.getSelection()?.removeAllRanges();
+  };
+
   return (
     <div
       style={{ left: `${coords.x}px`, top: `${coords.y}px` }}
@@ -104,6 +113,15 @@ export const HighlightMenu: React.FC = () => {
       >
         <StickyNote className="w-3.5 h-3.5" />
         <span>Note</span>
+      </button>
+
+      <button
+        onClick={handleLookup}
+        className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded bg-orange-600 hover:bg-orange-500 text-white transition"
+        title="Tra từ và lưu vào Sổ Từ Vựng YouPass"
+      >
+        <BookMarked className="w-3.5 h-3.5" />
+        <span>Sổ Từ</span>
       </button>
     </div>
   );
