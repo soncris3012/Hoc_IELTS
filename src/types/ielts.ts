@@ -7,7 +7,11 @@ export type QuestionType =
   | 'mcq_multiple'
   | 'gap_fill'
   | 'matching_headings'
-  | 'matching_information';
+  | 'matching_information'
+  | 'fill_in_blanks'
+  | 'multiple_choice'
+  | 'true_false_not_given'
+  | 'yes_no_not_given';
 
 export type ExamTheme = 'standard' | 'dark' | 'yellow' | 'youpass_orange';
 export type FontSize = 'standard' | 'large' | 'extralarge';
@@ -99,7 +103,7 @@ export interface Part {
   partNumber: number; // 1, 2, 3
   title: string;
   subtitle?: string;
-  instructions: string;
+  instructions?: string;
   passage?: {
     id: string;
     title: string;
