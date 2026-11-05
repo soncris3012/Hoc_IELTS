@@ -16,7 +16,8 @@ import { VocabLookupModal } from '@/components/exam/VocabLookupModal';
 import { GoalSettingModal } from '@/components/exam/GoalSettingModal';
 import { mockReadingExam } from '@/data/mockReadingTest';
 import { mockListeningExam } from '@/data/mockListeningTest';
-import { BookOpen, Headphones, PenTool, Database, Mic, ShieldAlert, BookMarked, Target, Flame } from 'lucide-react';
+import { youpassLegoExam } from '@/data/youpassLegoTest';
+import { BookOpen, Headphones, PenTool, Database, Mic, ShieldAlert, BookMarked, Target, Flame, Sparkles } from 'lucide-react';
 
 export default function ExamRoomPage() {
   const {
@@ -138,6 +139,23 @@ export default function ExamRoomPage() {
           >
             <Headphones className="w-3 h-3" />
             <span>Listening</span>
+          </button>
+
+          {/* YouPass Simulation Q4 Real Exam */}
+          <button
+            onClick={() => {
+              loadExam(youpassLegoExam);
+              setIsConfirmModalOpen(true);
+            }}
+            className={`flex items-center gap-1 px-2 py-0.5 rounded transition ${
+              exam.id === youpassLegoExam.id
+                ? 'bg-orange-600 text-white font-bold shadow-xs'
+                : 'text-amber-300 hover:text-white'
+            }`}
+            title="Đề YouPass Simulation thực tế được cào trực tiếp từ tài khoản"
+          >
+            <Sparkles className="w-3 h-3 text-amber-300" />
+            <span>YouPass Lego Test</span>
           </button>
 
           {/* Sổ Từ Vựng (YouPass Vocab Book) */}

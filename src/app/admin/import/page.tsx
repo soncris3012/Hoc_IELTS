@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { mockReadingExam } from '@/data/mockReadingTest';
 import { mockListeningExam } from '@/data/mockListeningTest';
+import { youpassLegoExam } from '@/data/youpassLegoTest';
 import { useExamStore } from '@/lib/store';
 import { IELTSExam } from '@/types/ielts';
 
@@ -44,6 +45,15 @@ export default function AdminImportPage() {
     setStatusMsg({
       type: 'success',
       text: 'Loaded preset: Cambridge IELTS 18 Listening Test 1 (Audio tracks & questions).',
+    });
+  };
+
+  // Preset 3: YouPass Lego Simulation
+  const handleLoadYouPassLegoPreset = () => {
+    setParsedExam(youpassLegoExam);
+    setStatusMsg({
+      type: 'success',
+      text: 'Loaded preset: [Simulation Q4] The Lego brick (YouPass Authentic 13 Questions).',
     });
   };
 
@@ -166,6 +176,13 @@ export default function AdminImportPage() {
               >
                 <Headphones className="w-3.5 h-3.5" />
                 Load Cam 18 Listening
+              </button>
+              <button
+                onClick={handleLoadYouPassLegoPreset}
+                className="flex items-center gap-1.5 px-3 py-2 text-xs font-bold rounded-lg bg-orange-600 hover:bg-orange-700 text-white shadow-xs transition"
+              >
+                <Sparkles className="w-3.5 h-3.5" />
+                Load YouPass Lego Test
               </button>
             </div>
           </div>
