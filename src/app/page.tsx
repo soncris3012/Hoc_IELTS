@@ -142,6 +142,15 @@ export default function ExamRoomPage() {
           </button>
 
           {/* YouPass Simulation Q4 Real Exam */}
+          <Link
+            href="/youpass"
+            className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 text-white font-extrabold text-[11px] shadow-sm hover:brightness-110 transition ring-1 ring-orange-300"
+            title="Mở phòng thi chuẩn 1:1 giao diện YouPass thực tế [The Lego brick]"
+          >
+            <Sparkles className="w-3 h-3 text-white" />
+            <span>YouPass 1:1 Room</span>
+          </Link>
+
           <button
             onClick={() => {
               loadExam(youpassLegoExam);
@@ -152,10 +161,10 @@ export default function ExamRoomPage() {
                 ? 'bg-orange-600 text-white font-bold shadow-xs'
                 : 'text-amber-300 hover:text-white'
             }`}
-            title="Đề YouPass Simulation thực tế được cào trực tiếp từ tài khoản"
+            title="Đề YouPass Simulation thực tế được cào trực tiếp từ tài khoản (CDT Engine)"
           >
-            <Sparkles className="w-3 h-3 text-amber-300" />
-            <span>YouPass Lego Test</span>
+            <BookOpen className="w-3 h-3 text-amber-300" />
+            <span>CDT Lego</span>
           </button>
 
           {/* Sổ Từ Vựng (YouPass Vocab Book) */}
