@@ -344,7 +344,7 @@ export const YouPassCatalog: React.FC<YouPassCatalogProps> = ({
       {/* Main Catalog Body */}
       <main className="flex-1 max-w-[1440px] w-full mx-auto px-4 sm:px-6 py-6 flex flex-col md:flex-row gap-6">
         {/* LEFT SIDEBAR FILTERS */}
-        <aside className="w-full md:w-64 shrink-0 space-y-5">
+        <aside className="w-full md:w-60 shrink-0 space-y-4 md:sticky md:top-[88px] md:self-start md:max-h-[calc(100vh-100px)] md:overflow-y-auto">
           {/* Promo Practice Plan */}
           <div className="p-4 rounded-2xl bg-gradient-to-br from-[#FF6D3A] to-[#FFA41B] text-white shadow-sm space-y-1.5">
             <div className="flex items-center gap-1.5">

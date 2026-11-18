@@ -358,22 +358,33 @@ export const YouPassQuestionSetRenderer: React.FC<YouPassQuestionSetRendererProp
         </div>
 
         {isExpanded && q.explain && (
-          <div
-            className="p-3 rounded-xl bg-[#FFF8F2] border border-[#FFEDD1] text-xs text-[#333333] leading-relaxed space-y-1.5 [&_u]:text-[#FF6D3A] [&_strong]:text-[#1D1D1F]"
-            dangerouslySetInnerHTML={{ __html: sanitizeYouPassHtml(q.explain) }}
-          />
+          <div className="mt-2 rounded-xl overflow-hidden border border-[#FFEDD1] bg-[#FFFBF7]">
+            <div className="flex items-center gap-2 px-3 py-2 bg-[#FF6D3A] text-white">
+              <Sparkles className="w-3.5 h-3.5" />
+              <span className="text-xs font-extrabold">Giải thích 4 Bước</span>
+            </div>
+            <div
+              className="p-3.5 text-xs text-[#333333] leading-relaxed [&_u]:text-[#FF6D3A] [&_u]:font-bold [&_strong]:text-[#1D1D1F] [&_strong]:font-bold [&_p]:my-1.5 [&_ul]:list-disc [&_ul]:pl-4 [&_ul]:space-y-1 [&_ol]:list-decimal [&_ol]:pl-4 [&_b]:font-bold [&_b]:text-[#1D1D1F]"
+              dangerouslySetInnerHTML={{ __html: sanitizeYouPassHtml(q.explain) }}
+            />
+          </div>
         )}
       </div>
     );
   };
 
   return (
-    <div className="p-5 rounded-2xl bg-white border border-[#FFEDD1] shadow-xs space-y-4">
+    <div className="p-5 rounded-2xl bg-white border border-[#FFEDD1] shadow-sm space-y-4">
       {/* Group Title & Instructions (also renders map images if embedded in description) */}
       <div className="border-b border-[#ECECEC] pb-3 space-y-1.5">
-        <span className="text-xs font-bold uppercase tracking-wider text-[#FF6D3A]">
-          {questionSet.title}
-        </span>
+        <div className="flex items-center justify-between gap-2">
+          <span className="text-xs font-black uppercase tracking-wider text-[#FF6D3A]">
+            {questionSet.title}
+          </span>
+          <span className="px-2 py-0.5 rounded-full bg-[#FFF1E5] text-[#4D2600] text-[10px] font-bold shrink-0">
+            {questionSet.question_type?.replace(/_/g, ' ')}
+          </span>
+        </div>
         {questionSet.description && (
           <div
             className="text-xs text-[#333333] leading-relaxed [&_p]:my-1 [&_img]:max-w-full [&_img]:h-auto [&_img]:rounded-xl [&_img]:border [&_img]:border-[#ECECEC] [&_img]:mt-2"
