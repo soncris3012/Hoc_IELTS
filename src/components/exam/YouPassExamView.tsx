@@ -293,7 +293,7 @@ export const YouPassExamView: React.FC = () => {
   return (
     <div
       className={`min-h-screen flex flex-col font-sans transition-colors duration-200 ${
-        eyeProtection ? 'bg-[#FFF8F2] text-[#1D1D1F]' : 'bg-[#FFFFFF] text-[#000000]'
+        eyeProtection ? 'bg-[#F6F7F9] text-[#1D1D1F]' : 'bg-[#FFFFFF] text-[#000000]'
       }`}
     >
       {/* ============================================================ */}

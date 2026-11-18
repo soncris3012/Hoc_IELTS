@@ -956,7 +956,7 @@ export const YouPassReadingListeningRoom: React.FC<YouPassReadingListeningRoomPr
                         )}
 
                         {/* Render Paragraph Sentences — with YouPass-style letter label (A, B, C…) */}
-                        <div className={`${fontSizeClasses[fontSize]} text-[#222222] text-justify font-serif flex gap-3`}>
+                        <div className={`${fontSizeClasses[fontSize]} text-[#222222] text-justify flex gap-3`}>
                           {/* Paragraph letter label — only for top-level paragraphs */}
                           {para.level === 1 && (
                             <span className="shrink-0 w-6 h-6 mt-0.5 rounded-full bg-[#FF6D3A] text-white font-black text-[11px] flex items-center justify-center font-sans select-none">
@@ -1001,7 +1001,7 @@ export const YouPassReadingListeningRoom: React.FC<YouPassReadingListeningRoomPr
                   })
                 ) : currentPart?.content ? (
                   <div
-                    className={`${fontSizeClasses[fontSize]} text-[#222222] font-serif space-y-3`}
+                    className={`${fontSizeClasses[fontSize]} text-[#222222] space-y-3`}
                     dangerouslySetInnerHTML={{ __html: sanitizeYouPassHtml(currentPart.content) }}
                   />
                 ) : (

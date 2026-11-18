@@ -712,7 +712,7 @@ export const YouPassCatalog: React.FC<YouPassCatalogProps> = ({
             </div>
           ) : (
             /* STANDARD SINGLE QUIZZES GRID */
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
               {displayedItems.map((test) => {
                 const isDone = completedQuizIds.has(test.id);
                 const partTag = (test.tags || []).find((t) =>
@@ -725,15 +725,17 @@ export const YouPassCatalog: React.FC<YouPassCatalogProps> = ({
                   (t) => t.id !== partTag?.id && t.id !== sourceTag?.id
                 );
 
-                // Color by passage/section number
+                // Color by passage/section number — matching YouPass.vn exact colors
+                // P1=orange, P2=blue-indigo, P3=purple, P4=emerald (Sections: S1=emerald, S2=sky, S3=violet, S4=orange)
+                const isListeningSkill = activeSkill === 'listening';
                 const partBgColor = partTag?.title?.includes('1')
-                  ? 'bg-violet-600'
+                  ? isListeningSkill ? 'bg-emerald-600' : 'bg-[#FF6D3A]'
                   : partTag?.title?.includes('2')
-                  ? 'bg-sky-600'
+                  ? isListeningSkill ? 'bg-sky-500' : 'bg-indigo-500'
                   : partTag?.title?.includes('3')
-                  ? 'bg-[#FF6D3A]'
+                  ? isListeningSkill ? 'bg-violet-600' : 'bg-purple-500'
                   : partTag?.title?.includes('4')
-                  ? 'bg-emerald-600'
+                  ? 'bg-[#FF6D3A]'
                   : 'bg-[#4D2600]';
 
                 return (
@@ -770,31 +772,32 @@ export const YouPassCatalog: React.FC<YouPassCatalogProps> = ({
                       />
                     </div>
 
-                    <div className="p-4 flex-1 flex flex-col justify-between gap-3">
+                    <div className="p-3.5 flex-1 flex flex-col justify-between gap-2.5">
                       <div>
-                        <div className="flex items-center justify-between text-[10px] font-extrabold text-[#8A8A8E] mb-1">
-                          <span>ID #{test.id}</span>
-                          {test.time && <span className="text-[#FF6D3A]">⏱ {test.time} phút</span>}
-                        </div>
-                        <h4 className="font-extrabold text-[13px] text-[#1D1D1F] line-clamp-2 leading-snug group-hover:text-[#FF6D3A] transition">
+                        <h4 className="font-extrabold text-[13px] text-[#1D1D1F] line-clamp-2 leading-snug group-hover:text-[#FF6D3A] transition mb-2">
                           {test.title}
                         </h4>
-                      </div>
-
-                      <div className="flex flex-wrap gap-1">
-                        {sourceTag && (
-                          <span className="px-2 py-0.5 rounded-full bg-[#FFEDD1] text-[#4D2600] text-[10px] font-bold">
-                            {sourceTag.title}
-                          </span>
-                        )}
-                        {qTypeTags.slice(0, 2).map((tg) => (
-                          <span
-                            key={tg.id}
-                            className="px-2 py-0.5 rounded-full bg-[#F3F4F6] text-[#374151] text-[10px] font-semibold"
-                          >
-                            {tg.title}
-                          </span>
-                        ))}
+                        {/* Question type bullet list — YouPass.vn style */}
+                        <div className="space-y-0.5">
+                          {sourceTag && (
+                            <div className="flex items-center gap-1.5 text-[11px]">
+                              <span className="w-1.5 h-1.5 rounded-full bg-[#FF6D3A] inline-block shrink-0" />
+                              <span className="font-semibold text-[#FF6D3A]">{sourceTag.title}</span>
+                            </div>
+                          )}
+                          {qTypeTags.slice(0, 3).map((tg) => (
+                            <div key={tg.id} className="flex items-center gap-1.5 text-[11px] text-[#6B7280]">
+                              <span className="w-1.5 h-1.5 rounded-full bg-[#D1D5DB] inline-block shrink-0" />
+                              <span>{tg.title}</span>
+                            </div>
+                          ))}
+                          {test.time && (
+                            <div className="flex items-center gap-1.5 text-[11px] text-[#9CA3AF]">
+                              <span className="w-1.5 h-1.5 rounded-full bg-[#D1D5DB] inline-block shrink-0" />
+                              <span>⏱ {test.time} phút</span>
+                            </div>
+                          )}
+                        </div>
                       </div>
 
                       <button
