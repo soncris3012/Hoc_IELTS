@@ -546,28 +546,27 @@ export const YouPassReadingListeningRoom: React.FC<YouPassReadingListeningRoomPr
           )}
 
           <div className="max-w-2xl mx-auto space-y-5 lg:pl-12">
-            {/* Title Header */}
-            <div className="border-b border-[#FFEDD1] pb-3 flex items-start justify-between gap-3">
-              <div>
-                <span className="text-xs font-bold uppercase tracking-wider text-[#FF6D3A]">
+            {/* Title Header — YouPass.vn style: label left-aligned, title centered */}
+            <div className="border-b border-[#FFEDD1] pb-4">
+              <div className="flex items-start justify-between gap-3 mb-1">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-[#FF6D3A]">
                   {isListening
                     ? `Listening Section ${currentPart?.passage || activePartIdx + 1}`
                     : `Reading Passage ${currentPart?.passage || activePartIdx + 1}`}
                 </span>
-                <h2 className="text-xl sm:text-2xl font-black text-[#1D1D1F] mt-1">
-                  {currentPart?.title || quiz.title}
-                </h2>
+                {locatedTarget && (
+                  <button
+                    type="button"
+                    onClick={() => setLocatedTarget(null)}
+                    className="px-2.5 py-1 rounded-full bg-[#FFF1E5] text-[#FF6D3A] text-[11px] font-bold shrink-0"
+                  >
+                    Đang định vị Câu {locatedTarget.order} ✕
+                  </button>
+                )}
               </div>
-
-              {locatedTarget && (
-                <button
-                  type="button"
-                  onClick={() => setLocatedTarget(null)}
-                  className="px-2.5 py-1 rounded-full bg-[#FFF1E5] text-[#FF6D3A] text-[11px] font-bold shrink-0"
-                >
-                  Đang định vị Câu {locatedTarget.order} ✕
-                </button>
-              )}
+              <h2 className="text-xl sm:text-2xl font-black text-[#1D1D1F] text-center leading-snug">
+                {currentPart?.title || quiz.title}
+              </h2>
             </div>
 
             {/* LISTENING LEFT PANE */}

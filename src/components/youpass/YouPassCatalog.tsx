@@ -240,31 +240,35 @@ export const YouPassCatalog: React.FC<YouPassCatalogProps> = ({
 
   return (
     <div className="flex-1 flex flex-col">
-      {/* Sub-bar Skill Tabs & Mode Selector */}
-      <div className="bg-[#FFF1E5] border-t border-b border-[#FFEDD1] px-4 py-2.5">
-        <div className="max-w-[1440px] mx-auto flex flex-wrap items-center justify-between gap-3 text-xs">
-          {/* 4 Skills Selector */}
-          <div className="flex items-center gap-2 overflow-x-auto">
+      {/* Sub-bar Skill Tabs & Mode Selector — YouPass.vn style: white bg, text tabs with underline */}
+      <div className="bg-white border-t border-b border-[#ECECEC] px-4">
+        <div className="max-w-[1440px] mx-auto flex flex-wrap items-center justify-between">
+          {/* 4 Skills Selector — simple tab with orange underline */}
+          <div className="flex items-center overflow-x-auto">
             {(
               [
                 {
                   key: 'reading',
-                  label: `Reading (${skillTotals.reading})`,
+                  label: 'Reading',
+                  count: skillTotals.reading,
                   icon: <BookOpen className="w-3.5 h-3.5" />,
                 },
                 {
                   key: 'listening',
-                  label: `Listening (${skillTotals.listening})`,
+                  label: 'Listening',
+                  count: skillTotals.listening,
                   icon: <Headphones className="w-3.5 h-3.5" />,
                 },
                 {
                   key: 'writing',
-                  label: `Writing (${skillTotals.writing})`,
+                  label: 'Writing',
+                  count: skillTotals.writing,
                   icon: <PenTool className="w-3.5 h-3.5" />,
                 },
                 {
                   key: 'speaking',
-                  label: `Speaking (${skillTotals.speaking})`,
+                  label: 'Speaking',
+                  count: skillTotals.speaking,
                   icon: <Mic className="w-3.5 h-3.5" />,
                 },
               ] as const
@@ -273,20 +277,23 @@ export const YouPassCatalog: React.FC<YouPassCatalogProps> = ({
                 key={sk.key}
                 type="button"
                 onClick={() => onChangeSkill(sk.key)}
-                className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full font-extrabold transition shrink-0 ${
+                className={`flex items-center gap-1.5 px-4 py-3 text-sm font-bold transition-all shrink-0 border-b-2 ${
                   activeSkill === sk.key
-                    ? 'bg-[#FF6D3A] text-white shadow-xs'
-                    : 'bg-white text-[#4D2600] hover:bg-[#FFEBE0]'
+                    ? 'border-[#FF6D3A] text-[#FF6D3A]'
+                    : 'border-transparent text-[#6B7280] hover:text-[#1D1D1F] hover:border-[#D1D5DB]'
                 }`}
               >
                 {sk.icon}
                 <span>{sk.label}</span>
+                <span className={`text-[11px] font-normal ${activeSkill === sk.key ? 'text-[#FF6D3A]' : 'text-[#9CA3AF]'}`}>
+                  ({sk.count})
+                </span>
               </button>
             ))}
           </div>
 
           {/* Sub-mode pills (Bài lẻ / Full đề / Dictation) */}
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-1.5 py-2">
             {(activeSkill === 'reading' || activeSkill === 'listening') && (
               <>
                 <button

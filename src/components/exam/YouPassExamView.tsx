@@ -614,7 +614,8 @@ export const YouPassExamView: React.FC = () => {
           {/* Bottom Question Palette for Reading & Listening */}
           {activeQuiz && !isWritingQuiz && allQuestionSlots.length > 0 && (
             <footer className="h-14 bg-white border-t border-[#ECECEC] px-4 sm:px-8 flex items-center justify-between gap-4 z-30 shadow-xs shrink-0">
-              <div className="flex items-center gap-1.5 overflow-x-auto py-1">
+              {/* Question number pills — green-bordered group like YouPass.vn */}
+              <div className="flex items-center gap-1 overflow-x-auto py-1 px-2 rounded-xl border border-[#13A62E]/30 bg-[#F0FDF4]/60">
                 {allQuestionSlots.map((slot) => {
                   const val = answers[slot.order];
                   const hasAnswer = typeof val === 'string' && val.trim().length > 0;
@@ -647,7 +648,7 @@ export const YouPassExamView: React.FC = () => {
                           ? 'bg-[#FF6D3A] text-white shadow-xs'
                           : isCurrent
                           ? 'border-2 border-[#FF6D3A] bg-[#FFF1E5] text-[#FF6D3A]'
-                          : 'bg-[#FFF1E5]/60 text-[#4D2600] hover:bg-[#FFEBE0]'
+                          : 'bg-white text-[#4D2600] border border-[#D1FAE5] hover:bg-[#ECFDF5]'
                       }`}
                     >
                       {slot.order}
