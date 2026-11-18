@@ -611,6 +611,24 @@ export const YouPassExamView: React.FC = () => {
             />
           ) : null}
 
+          {/* CTA Banner — YouPass promo in exam footer */}
+          {activeQuiz && !isWritingQuiz && allQuestionSlots.length > 0 && !isSubmitted && (
+            <div className="border-t border-[#FFEDD1] bg-[#FFF1E8] px-4 py-2 flex items-center justify-between gap-3 text-xs">
+              <span className="font-semibold text-[#4D2600] text-[11px]">📚 Bài đọc giải thích cực kỳ chi tiết với YouPass</span>
+              <div className="flex items-center gap-2">
+                <button className="px-3 py-1 rounded-full bg-white border border-[#FFEDD1] text-[#4D2600] font-bold text-[10px] hover:bg-[#FFF8F2] transition">
+                  Kho bài tập
+                </button>
+                <button
+                  onClick={() => setIsConfirmModalOpen(true)}
+                  className="px-3 py-1 rounded-full bg-[#FF6D3A] text-white font-bold text-[10px] hover:bg-[#ff581d] transition"
+                >
+                  Nộp bài
+                </button>
+              </div>
+            </div>
+          )}
+
           {/* Bottom Question Palette for Reading & Listening */}
           {activeQuiz && !isWritingQuiz && allQuestionSlots.length > 0 && (
             <footer className="h-14 bg-white border-t border-[#ECECEC] px-4 sm:px-8 flex items-center justify-between gap-4 z-30 shadow-xs shrink-0">

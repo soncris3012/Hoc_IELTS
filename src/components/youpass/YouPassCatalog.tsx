@@ -11,6 +11,7 @@ import {
   Headphones,
   Layers,
   Mic,
+  Monitor,
   PenTool,
   Play,
   Search,
@@ -63,6 +64,10 @@ export const YouPassCatalog: React.FC<YouPassCatalogProps> = ({
   const [qTypeFilter, setQTypeFilter] = useState<string>('null');
   const [bookTypeFilter, setBookTypeFilter] = useState<string>('null');
   const [topicFilter, setTopicFilter] = useState<string>('null');
+
+  // Interface chooser modal state (YouPass.vn "Chọn giao diện làm bài")
+  const [interfaceModalQuizId, setInterfaceModalQuizId] = useState<number | null>(null);
+  const [selectedInterface, setSelectedInterface] = useState<'practice' | 'exam'>('practice');
   const [statusFilter, setStatusFilter] = useState<'all' | 'unfinished' | 'finished'>('all');
   const [searchInput, setSearchInput] = useState<string>('');
   const [debouncedSearch, setDebouncedSearch] = useState<string>('');
@@ -352,6 +357,17 @@ export const YouPassCatalog: React.FC<YouPassCatalogProps> = ({
       <main className="flex-1 max-w-[1440px] w-full mx-auto px-4 sm:px-6 py-6 flex flex-col md:flex-row gap-6">
         {/* LEFT SIDEBAR FILTERS */}
         <aside className="w-full md:w-60 shrink-0 space-y-4 md:sticky md:top-[88px] md:self-start md:max-h-[calc(100vh-100px)] md:overflow-y-auto">
+          {/* YouPass Collect Card */}
+          <div className="p-3 rounded-2xl bg-white border border-[#E5E7EB] flex items-center gap-3 cursor-pointer hover:bg-[#F9FAFB] hover:border-[#FF6D3A]/40 transition">
+            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#FF6D3A] to-[#FFA41B] flex items-center justify-center shrink-0 shadow-sm">
+              <span className="text-white text-[11px] font-black">YP</span>
+            </div>
+            <div>
+              <div className="text-xs font-black text-[#1D1D1F]">YouPass Collect</div>
+              <div className="text-[11px] text-[#6B7280]">Review đề thi thật</div>
+            </div>
+          </div>
+
           {/* Promo Practice Plan */}
           <div className="p-4 rounded-2xl bg-gradient-to-br from-[#FF6D3A] to-[#FFA41B] text-white shadow-sm space-y-1.5">
             <div className="flex items-center gap-1.5">
@@ -748,13 +764,14 @@ export const YouPassCatalog: React.FC<YouPassCatalogProps> = ({
                 return (
                   <div
                     key={test.id}
-                    className="group bg-white rounded-2xl border border-[#FFEDD1] overflow-hidden shadow-sm hover:shadow-lg transition-all duration-200 flex flex-col"
+                    className="group bg-white rounded-2xl border border-[#FFEDD1] overflow-hidden shadow-sm hover:shadow-lg transition-all duration-200 flex flex-col cursor-pointer"
+                    onClick={() => setInterfaceModalQuizId(test.id)}
                   >
                     <div className="aspect-[342/190] relative w-full overflow-hidden bg-[#FFF1E5]">
                       {/* Views badge */}
                       <div className="absolute left-2 top-2 z-10 px-2 py-0.5 rounded-full bg-black/60 backdrop-blur-sm text-white text-[10px] font-bold flex items-center gap-1">
                         <Eye className="w-3 h-3 text-amber-300" />
-                        <span>{(test.total_submitted || 0).toLocaleString()} lượt</span>
+                        <span>{(test.total_submitted || 0).toLocaleString('vi-VN')} lượt làm bài</span>
                       </div>
 
                       {isDone && (
@@ -809,16 +826,11 @@ export const YouPassCatalog: React.FC<YouPassCatalogProps> = ({
 
                       <button
                         type="button"
-                        onClick={() =>
-                          onLaunchQuiz(
-                            test.id,
-                            practiceMode === 'dictation' ? 'dictation' : 'normal'
-                          )
-                        }
+                        onClick={() => setInterfaceModalQuizId(test.id)}
                         className="w-full py-2.5 rounded-full bg-[#FF6D3A] hover:bg-[#ff581d] text-white font-extrabold text-xs transition shadow-sm flex items-center justify-center gap-1.5 mt-2 border-t border-[#F3F4F6] pt-3"
                       >
                         <Play className="w-3.5 h-3.5" />
-                        <span>{practiceMode === 'dictation' ? 'Luyện Dictation' : 'Luyện đề ngay'}</span>
+                        <span>{practiceMode === 'dictation' ? 'Luyện Dictation' : 'Chọn giao diện'}</span>
                       </button>
                     </div>
                   </div>
@@ -886,6 +898,61 @@ export const YouPassCatalog: React.FC<YouPassCatalogProps> = ({
           )}
         </section>
       </main>
+
+      {/* Interface Chooser Modal — YouPass.vn "Chọn giao diện làm bài" */}
+      {interfaceModalQuizId !== null && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4" onClick={() => setInterfaceModalQuizId(null)}>
+          <div className="w-full max-w-lg bg-white rounded-2xl shadow-2xl p-6 space-y-5" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-start justify-between">
+              <div>
+                <h3 className="text-lg font-black text-[#1D1D1F]">Chọn giao diện làm bài</h3>
+                <p className="text-xs text-[#6B7280] mt-0.5">Chọn giao diện phù hợp với mục tiêu luyện tập của bạn</p>
+              </div>
+              <button onClick={() => setInterfaceModalQuizId(null)} className="p-1 text-[#8A8A8E] hover:text-[#1D1D1F] transition">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <button
+                type="button"
+                onClick={() => setSelectedInterface('practice')}
+                className={`p-4 rounded-2xl border-2 text-left transition space-y-2 ${selectedInterface === 'practice' ? 'border-[#13A62E] bg-[#F0FDF4]' : 'border-[#E5E7EB] hover:border-[#13A62E]/40'}`}
+              >
+                <div className="aspect-video rounded-xl bg-[#F0FDF4] border-2 border-[#13A62E]/30 flex items-center justify-center">
+                  <BookOpen className="w-8 h-8 text-[#13A62E]" />
+                </div>
+                <div className="font-extrabold text-sm text-[#1D1D1F]">Giao diện Luyện tập</div>
+                <p className="text-[11px] text-[#6B7280] leading-relaxed">Hỗ trợ tra từ vựng, gợi ý, giải thích chi tiết. Phù hợp để luyện tập hàng ngày.</p>
+              </button>
+              <button
+                type="button"
+                onClick={() => setSelectedInterface('exam')}
+                className={`p-4 rounded-2xl border-2 text-left transition space-y-2 ${selectedInterface === 'exam' ? 'border-[#4B63E6] bg-[#EEF2FF]' : 'border-[#E5E7EB] hover:border-[#4B63E6]/40'}`}
+              >
+                <div className="aspect-video rounded-xl bg-[#F5F5F5] border border-[#D1D5DB] flex items-center justify-center">
+                  <Monitor className="w-8 h-8 text-[#6B7280]" />
+                </div>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="font-extrabold text-sm text-[#1D1D1F]">Giao diện Thi thật</span>
+                  <span className="px-1.5 py-0.5 rounded-full bg-[#FF6D3A] text-white text-[10px] font-bold leading-none">Giống 100%</span>
+                </div>
+                <p className="text-[11px] text-[#6B7280] leading-relaxed">Mô phỏng 100% giao diện thi máy CDT, giúp làm quen môi trường thi thật.</p>
+              </button>
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                onLaunchQuiz(interfaceModalQuizId, practiceMode === 'dictation' ? 'dictation' : 'normal');
+                setInterfaceModalQuizId(null);
+              }}
+              className="w-full py-3 rounded-full bg-[#FF6D3A] hover:bg-[#ff581d] text-white font-extrabold text-sm transition shadow-sm flex items-center justify-center gap-2"
+            >
+              <Play className="w-4 h-4" />
+              <span>Bắt đầu làm bài</span>
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Mock Test Part Selector Modal */}
       {selectedMockItem && (
