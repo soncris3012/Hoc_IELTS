@@ -797,37 +797,19 @@ export const YouPassCatalog: React.FC<YouPassCatalogProps> = ({
                         ))}
                       </div>
 
-                      <div className="grid grid-cols-2 gap-2 pt-2 border-t border-[#F3F4F6]">
-                        <button
-                          type="button"
-                          onClick={() =>
-                            onLaunchQuiz(
-                              test.id,
-                              practiceMode === 'dictation' ? 'dictation' : 'normal'
-                            )
-                          }
-                          className="py-2 px-3 rounded-full bg-[#FFF1E5] hover:bg-[#FFEBE0] text-[#FF6D3A] font-extrabold text-[11px] transition border border-[#FFEDD1] flex items-center justify-center gap-1"
-                        >
-                          <span>{practiceMode === 'dictation' ? 'Dictation' : 'Luyện đề'}</span>
-                          <span className="text-[9px] bg-blue-500 text-white px-1 py-px rounded-full">
-                            FREE
-                          </span>
-                        </button>
-
-                        <button
-                          type="button"
-                          onClick={() =>
-                            onLaunchQuiz(
-                              test.id,
-                              practiceMode === 'dictation' ? 'dictation' : 'normal'
-                            )
-                          }
-                          className="py-2 px-3 rounded-full bg-[#FF6D3A] hover:bg-[#ff581d] text-white font-extrabold text-[11px] transition shadow-sm flex items-center justify-center gap-1"
-                        >
-                          <span>Phòng thi</span>
-                          <ChevronRight className="w-3.5 h-3.5" />
-                        </button>
-                      </div>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          onLaunchQuiz(
+                            test.id,
+                            practiceMode === 'dictation' ? 'dictation' : 'normal'
+                          )
+                        }
+                        className="w-full py-2.5 rounded-full bg-[#FF6D3A] hover:bg-[#ff581d] text-white font-extrabold text-xs transition shadow-sm flex items-center justify-center gap-1.5 mt-2 border-t border-[#F3F4F6] pt-3"
+                      >
+                        <Play className="w-3.5 h-3.5" />
+                        <span>{practiceMode === 'dictation' ? 'Luyện Dictation' : 'Luyện đề ngay'}</span>
+                      </button>
                     </div>
                   </div>
                 );

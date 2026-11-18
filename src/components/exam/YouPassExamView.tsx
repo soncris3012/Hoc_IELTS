@@ -300,7 +300,7 @@ export const YouPassExamView: React.FC = () => {
       {/* 1. TOP HEADER NAVIGATION (100% INTERNAL ROUTES & STATE)      */}
       {/* ============================================================ */}
       <header className="sticky top-0 z-40 w-full bg-white border-b border-[#ECECEC] shadow-xs select-none">
-        <div className="max-w-[1440px] mx-auto px-4 h-12 flex items-center justify-between gap-4">
+        <div className="max-w-[1440px] mx-auto px-4 h-14 flex items-center justify-between gap-4">
           {/* Logo & Main Internal Tabs */}
           <div className="flex items-center gap-4 sm:gap-6">
             <button
@@ -308,9 +308,9 @@ export const YouPassExamView: React.FC = () => {
               onClick={() => setViewMode('catalog')}
               className="flex items-center gap-1.5 shrink-0"
             >
-              <span className="text-xl font-black text-[#FF6D3A] tracking-tighter">YouPass</span>
-              <span className="text-[10px] font-bold px-1.5 py-0.2 rounded-full bg-[#FFEDD1] text-[#4D2600]">
-                1984
+              <span className="text-[22px] font-black text-[#FF6D3A] tracking-tight">YouPass</span>
+              <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-[#FFEDD1] text-[#4D2600]">
+                IELTS
               </span>
             </button>
 
@@ -418,7 +418,7 @@ export const YouPassExamView: React.FC = () => {
 
         {/* Exam Room Control Sub-bar (when inside active exam) */}
         {viewMode === 'exam' && (
-          <div className="bg-white border-t border-[#ECECEC] px-4 py-2 flex items-center justify-between gap-2 text-xs shadow-xs">
+          <div className="bg-white border-t border-[#ECECEC] px-4 py-2.5 flex items-center justify-between gap-2 text-xs shadow-xs">
             <div className="flex items-center gap-3 min-w-0">
               <button
                 type="button"

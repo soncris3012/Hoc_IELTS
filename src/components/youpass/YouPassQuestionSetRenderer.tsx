@@ -666,6 +666,9 @@ export const YouPassQuestionSetRenderer: React.FC<YouPassQuestionSetRendererProp
                       <div className="flex flex-wrap gap-1.5">
                         {optionList.map((opt) => {
                           const isChecked = userVal === opt.option;
+                          const isCorrectAnswer = isSubmitted && q.correct_answers?.some(
+                            (ca) => ca.toUpperCase() === opt.option.toUpperCase()
+                          );
                           return (
                             <button
                               key={opt.option}
@@ -675,17 +678,20 @@ export const YouPassQuestionSetRenderer: React.FC<YouPassQuestionSetRendererProp
                                 onFocusQuestion(q.order);
                                 onAnswerChange(q.order, isChecked ? '' : opt.option);
                               }}
-                              className={`px-3 py-1.5 rounded-xl border text-xs font-extrabold transition ${
-                                isChecked
+                              className={`px-3.5 py-1.5 rounded-full border text-xs font-extrabold transition ${
+                                isSubmitted
+                                  ? isCorrectAnswer
+                                    ? 'bg-[#E8F8EC] text-[#13A62E] border-[#13A62E]'
+                                    : isChecked
+                                    ? 'bg-[#FFF1F1] text-[#FF3532] border-[#FF3532]'
+                                    : 'bg-[#F3F4F6] text-[#9CA3AF] border-[#E5E7EB]'
+                                  : isChecked
                                   ? 'bg-[#FF6D3A] text-white border-[#FF6D3A] shadow-xs'
                                   : 'bg-[#FFF8F2] text-[#4D2600] border-[#FFEDD1] hover:bg-[#FFEBE0]'
                               }`}
                               title={opt.text}
                             >
-                              {opt.option}
-                              {opt.text !== opt.option && optionList.length <= 4
-                                ? ` (${opt.text})`
-                                : ''}
+                              {opt.text && opt.text !== opt.option ? opt.text : opt.option}
                             </button>
                           );
                         })}

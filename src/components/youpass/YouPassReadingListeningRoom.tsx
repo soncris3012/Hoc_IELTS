@@ -436,66 +436,7 @@ export const YouPassReadingListeningRoom: React.FC<YouPassReadingListeningRoomPr
 
       {/* Split Workspace */}
       <div className="flex-1 flex flex-col md:flex-row overflow-hidden relative">
-        {/* Floating Tool Shortcuts Toolbar on Left Edge (Reading & Review) */}
-        {!isListening && (
-          <div className="hidden lg:flex flex-col gap-2 absolute left-2 top-6 z-30 bg-white/95 backdrop-blur-xs p-1.5 rounded-xl border border-[#FFEDD1] shadow-md text-[11px] font-bold text-[#4D2600]">
-            <button
-              type="button"
-              onClick={() => onSelectTool(activeTool === 'highlight' ? null : 'highlight')}
-              className={`p-2 rounded-lg flex flex-col items-center gap-1 transition ${
-                activeTool === 'highlight'
-                  ? 'bg-[#FF6D3A] text-white'
-                  : 'hover:bg-[#FFF8F2] text-[#4D2600]'
-              }`}
-              title="Bôi đen chữ trên bài đọc để Highlight (Phím H)"
-            >
-              <Highlighter className="w-4 h-4" />
-              <span>Highlight</span>
-              <span className="text-[9px] opacity-75 font-normal">(H)</span>
-            </button>
 
-            <button
-              type="button"
-              onClick={() => onSelectTool(activeTool === 'note' ? null : 'note')}
-              className={`p-2 rounded-lg flex flex-col items-center gap-1 transition ${
-                activeTool === 'note'
-                  ? 'bg-[#FF6D3A] text-white'
-                  : 'hover:bg-[#FFF8F2] text-[#4D2600]'
-              }`}
-              title="Bôi đen chữ để lưu vào Ghi chú (Phím N)"
-            >
-              <FileText className="w-4 h-4" />
-              <span>Notes</span>
-              <span className="text-[9px] opacity-75 font-normal">(N)</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => onSelectTool(activeTool === 'vocab' ? null : 'vocab')}
-              className={`p-2 rounded-lg flex flex-col items-center gap-1 transition ${
-                activeTool === 'vocab'
-                  ? 'bg-[#FF6D3A] text-white'
-                  : 'hover:bg-[#FFF8F2] text-[#4D2600]'
-              }`}
-              title="Bôi đen từ để tra cứu Cambridge Dictionary (Phím T)"
-            >
-              <BookOpen className="w-4 h-4" />
-              <span>Tra từ</span>
-              <span className="text-[9px] opacity-75 font-normal">(T)</span>
-            </button>
-
-            {highlightSnippets.length > 0 && (
-              <button
-                type="button"
-                onClick={() => setHighlightSnippets([])}
-                className="p-1.5 rounded-lg text-[10px] text-[#FF3532] hover:bg-[#FFF1F1] transition"
-                title="Xóa toàn bộ highlight"
-              >
-                Xóa HL
-              </button>
-            )}
-          </div>
-        )}
 
         {/* Quick Dictionary Popover (Tool T) */}
         {vocabPopup && (
@@ -541,7 +482,7 @@ export const YouPassReadingListeningRoom: React.FC<YouPassReadingListeningRoomPr
         {/* ============================================================ */}
         <section
           onMouseUp={!isListening ? handlePassageMouseUp : undefined}
-          className="w-full md:w-1/2 h-[45vh] md:h-[calc(100vh-170px)] overflow-y-auto relative px-5 sm:px-8 lg:pl-10 lg:pr-10 py-6 border-b md:border-b-0 md:border-r border-[#ECECEC]"
+          className="w-full md:w-1/2 h-[45vh] md:h-[calc(100vh-172px)] overflow-y-auto relative px-5 sm:px-8 lg:pl-10 lg:pr-10 py-6 border-b md:border-b-0 md:border-r border-[#ECECEC]"
         >
           {/* Floating Tool Shortcuts Toolbar — inside left pane, so it doesn't overlap right pane */}
           {!isListening && (
@@ -1014,39 +955,47 @@ export const YouPassReadingListeningRoom: React.FC<YouPassReadingListeningRoomPr
                           </div>
                         )}
 
-                        {/* Render Paragraph Sentences */}
-                        <p className={`${fontSizeClasses[fontSize]} text-[#222222] text-justify font-serif`}>
-                          {para.children && para.children.length > 0 ? (
-                            para.children.map((sent, sIdx) => {
-                              const sentNum = sIdx + 1;
-                              const isLoc = isSentenceLocated(paraNum, sentNum);
-                              const badges = locateBadgeMap.get(`${paraNum}-${sentNum}`);
-                              return (
-                                <span
-                                  key={sent.id || sIdx}
-                                  id={`yp-para-${paraNum}-sent-${sentNum}`}
-                                  className={`transition-colors duration-300 ${
-                                    isLoc
-                                      ? 'bg-[#FFE5B4] text-[#1D1D1F] px-1 rounded border-b-2 border-[#FF6D3A]'
-                                      : badges
-                                      ? 'bg-[#FFF8DC] rounded px-0.5'
-                                      : ''
-                                  }`}
-                                >
-                                  {badges && (
-                                    <span className="inline-flex items-center gap-0.5 mr-1 px-1.5 py-0.2 rounded bg-[#FF6D3A] text-white font-sans font-extrabold text-[10px] align-middle">
-                                      <Sparkles className="w-2.5 h-2.5" />
-                                      Câu {badges.join(', ')}
-                                    </span>
-                                  )}
-                                  {renderSentenceText(sent.value)}{' '}
-                                </span>
-                              );
-                            })
-                          ) : (
-                            <span>{renderSentenceText(para.value)}</span>
+                        {/* Render Paragraph Sentences — with YouPass-style letter label (A, B, C…) */}
+                        <div className={`${fontSizeClasses[fontSize]} text-[#222222] text-justify font-serif flex gap-3`}>
+                          {/* Paragraph letter label — only for top-level paragraphs */}
+                          {para.level === 1 && (
+                            <span className="shrink-0 w-6 h-6 mt-0.5 rounded-full bg-[#FF6D3A] text-white font-black text-[11px] flex items-center justify-center font-sans select-none">
+                              {String.fromCharCode(64 + paraNum)}
+                            </span>
                           )}
-                        </p>
+                          <p className="flex-1 leading-relaxed">
+                            {para.children && para.children.length > 0 ? (
+                              para.children.map((sent, sIdx) => {
+                                const sentNum = sIdx + 1;
+                                const isLoc = isSentenceLocated(paraNum, sentNum);
+                                const badges = locateBadgeMap.get(`${paraNum}-${sentNum}`);
+                                return (
+                                  <span
+                                    key={sent.id || sIdx}
+                                    id={`yp-para-${paraNum}-sent-${sentNum}`}
+                                    className={`transition-colors duration-300 ${
+                                      isLoc
+                                        ? 'bg-[#FFE5B4] text-[#1D1D1F] px-1 rounded border-b-2 border-[#FF6D3A]'
+                                        : badges
+                                        ? 'bg-[#FFF8DC] rounded px-0.5'
+                                        : ''
+                                    }`}
+                                  >
+                                    {badges && (
+                                      <span className="inline-flex items-center gap-0.5 mr-1 px-1.5 py-0.5 rounded bg-[#FF6D3A] text-white font-sans font-extrabold text-[10px] align-middle">
+                                        <Sparkles className="w-2.5 h-2.5" />
+                                        Câu {badges.join(', ')}
+                                      </span>
+                                    )}
+                                    {renderSentenceText(sent.value)}{' '}
+                                  </span>
+                                );
+                              })
+                            ) : (
+                              <span>{renderSentenceText(para.value)}</span>
+                            )}
+                          </p>
+                        </div>
                       </div>
                     );
                   })
