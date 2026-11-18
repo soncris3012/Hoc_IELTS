@@ -6,12 +6,13 @@ import {
   ArrowLeft,
   ChevronDown,
   Clock,
+  Eye,
+  EyeOff,
   FileText,
   Home,
   LayoutGrid,
   Monitor,
   Plus,
-  Settings,
   Trash2,
   X,
 } from 'lucide-react';
@@ -80,7 +81,6 @@ export const YouPassExamView: React.FC = () => {
   // Exam Room UI & Settings States
   const [fontSize, setFontSize] = useState<'S' | 'M' | 'L'>('M');
   const [eyeProtection, setEyeProtection] = useState<boolean>(true);
-  const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
   const [isNotesOpen, setIsNotesOpen] = useState<boolean>(false);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState<boolean>(false);
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
@@ -418,98 +418,78 @@ export const YouPassExamView: React.FC = () => {
 
         {/* Exam Room Control Sub-bar (when inside active exam) */}
         {viewMode === 'exam' && (
-          <div className="bg-[#FFF1E5] border-t border-[#FFEDD1] px-4 py-1.5 flex items-center justify-between gap-2 text-xs">
+          <div className="bg-white border-t border-[#ECECEC] px-4 py-2 flex items-center justify-between gap-2 text-xs shadow-xs">
             <div className="flex items-center gap-3 min-w-0">
               <button
                 type="button"
                 onClick={() => setViewMode('catalog')}
-                className="flex items-center gap-1 text-[#8A8A8E] hover:text-[#1D1D1F] font-bold shrink-0"
+                className="flex items-center gap-1.5 text-[#8A8A8E] hover:text-[#FF6D3A] font-bold shrink-0 transition"
               >
-                <ArrowLeft className="w-4 h-4" />
+                <ArrowLeft className="w-3.5 h-3.5" />
                 <span>Kho đề</span>
               </button>
-              <span className="font-bold text-[#1D1D1F] truncate">
+              <span className="hidden sm:block w-px h-4 bg-[#E5E5EA] shrink-0" />
+              <span className="font-bold text-[#1D1D1F] truncate max-w-xs">
                 {activeQuiz ? activeQuiz.title : 'Đang tải đề thi...'}
               </span>
             </div>
 
-            {/* Dynamic Countdown Pill */}
-            <div className="flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#FF6D3A] text-white font-mono font-bold shadow-xs shrink-0">
+            {/* Center: Countdown Timer */}
+            <div className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full font-mono font-black shadow-xs shrink-0 transition ${
+              secondsRemaining <= 300 ? 'bg-[#FF3532] text-white animate-pulse' : 'bg-[#FF6D3A] text-white'
+            }`}>
               <Clock className="w-3.5 h-3.5" />
               <span>{formatSecondsHMS(secondsRemaining)}</span>
             </div>
 
-            {/* Tools: Notes, Settings, Submit */}
-            <div className="flex items-center gap-2 shrink-0">
+            {/* Tools: Font, Eye, Notes, Settings, Submit */}
+            <div className="flex items-center gap-1.5 shrink-0">
+              {/* Font Size Quick Selector */}
+              <div className="hidden sm:flex items-center gap-0.5 bg-[#FFF8F2] rounded-full px-1 py-0.5 border border-[#FFEDD1]">
+                {(['S', 'M', 'L'] as const).map((sz) => (
+                  <button
+                    key={sz}
+                    type="button"
+                    onClick={() => setFontSize(sz)}
+                    className={`w-6 h-6 rounded-full text-[11px] font-extrabold transition ${
+                      fontSize === sz
+                        ? 'bg-[#FF6D3A] text-white shadow-xs'
+                        : 'text-[#4D2600] hover:bg-[#FFEBE0]'
+                    }`}
+                  >
+                    {sz}
+                  </button>
+                ))}
+              </div>
+
+              {/* Eye Protection Toggle */}
+              <button
+                type="button"
+                onClick={() => setEyeProtection(!eyeProtection)}
+                title={eyeProtection ? 'Tắt bảo vệ mắt' : 'Bật bảo vệ mắt'}
+                className={`hidden sm:flex items-center gap-1 px-2.5 py-1.5 rounded-full border font-semibold transition ${
+                  eyeProtection
+                    ? 'bg-amber-50 border-amber-200 text-amber-700'
+                    : 'bg-white border-[#E5E5EA] text-[#8A8A8E] hover:bg-[#F8F8F8]'
+                }`}
+              >
+                {eyeProtection ? <Eye className="w-3.5 h-3.5" /> : <EyeOff className="w-3.5 h-3.5" />}
+              </button>
+
               <button
                 type="button"
                 onClick={() => setIsNotesOpen(!isNotesOpen)}
-                className="flex items-center gap-1 px-3 py-1 rounded-full bg-white border border-[#E5E5EA] text-[#1D1D1F] hover:bg-[#F8F8F8] font-semibold transition"
+                className="flex items-center gap-1 px-2.5 py-1.5 rounded-full bg-white border border-[#E5E5EA] text-[#1D1D1F] hover:bg-[#F8F8F8] font-semibold transition"
               >
                 <FileText className="w-3.5 h-3.5 text-[#FF6D3A]" />
-                <span className="hidden sm:inline">Xem note ({notesList.length})</span>
+                <span className="hidden sm:inline">Note ({notesList.length})</span>
               </button>
-
-              {/* Settings Popover */}
-              <div className="relative">
-                <button
-                  type="button"
-                  onClick={() => setIsSettingsOpen(!isSettingsOpen)}
-                  className="flex items-center gap-1 px-3 py-1 rounded-full bg-white border border-[#E5E5EA] text-[#1D1D1F] hover:bg-[#F8F8F8] font-semibold transition"
-                >
-                  <Settings className="w-3.5 h-3.5 text-[#8A8A8E]" />
-                  <span className="hidden sm:inline">Cài đặt</span>
-                </button>
-
-                {isSettingsOpen && (
-                  <div className="absolute right-0 top-full mt-2 w-64 bg-white rounded-xl shadow-xl border border-[#ECECEC] p-4 z-50 space-y-4">
-                    <div className="flex items-center justify-between">
-                      <span className="font-bold text-[#1D1D1F] text-xs">Chế độ bảo vệ mắt</span>
-                      <button
-                        type="button"
-                        onClick={() => setEyeProtection(!eyeProtection)}
-                        className={`w-9 h-5 rounded-full p-0.5 transition ${
-                          eyeProtection ? 'bg-[#FF6D3A]' : 'bg-[#E5E5EA]'
-                        }`}
-                      >
-                        <div
-                          className={`w-4 h-4 rounded-full bg-white shadow-xs transition-transform ${
-                            eyeProtection ? 'translate-x-4' : 'translate-x-0'
-                          }`}
-                        />
-                      </button>
-                    </div>
-
-                    <div>
-                      <span className="block font-bold text-[#1D1D1F] text-xs mb-2">
-                        Kích cỡ chữ
-                      </span>
-                      <div className="grid grid-cols-3 gap-2">
-                        {(['S', 'M', 'L'] as const).map((sz) => (
-                          <button
-                            key={sz}
-                            type="button"
-                            onClick={() => setFontSize(sz)}
-                            className={`py-1 rounded-lg text-xs font-bold transition border ${
-                              fontSize === sz
-                                ? 'bg-[#FF6D3A] text-white border-[#FF6D3A]'
-                                : 'bg-[#FFF8F2] text-[#4D2600] border-[#FFEDD1] hover:bg-[#FFEBE0]'
-                            }`}
-                          >
-                            {sz}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
 
               {!isSubmitted && !isWritingQuiz && activeQuiz && (
                 <button
                   type="button"
                   onClick={() => setIsConfirmModalOpen(true)}
-                  className="px-4 py-1.5 rounded-full bg-[#FF6D3A] hover:bg-[#ff581d] text-white font-extrabold text-xs shadow-sm transition"
+                  className="px-4 py-1.5 rounded-full bg-[#FF6D3A] hover:bg-[#ff581d] text-white font-extrabold transition shadow-sm"
                 >
                   Hoàn thành
                 </button>

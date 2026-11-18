@@ -541,9 +541,70 @@ export const YouPassReadingListeningRoom: React.FC<YouPassReadingListeningRoomPr
         {/* ============================================================ */}
         <section
           onMouseUp={!isListening ? handlePassageMouseUp : undefined}
-          className="w-full md:w-1/2 h-[45vh] md:h-[calc(100vh-170px)] overflow-y-auto px-5 sm:px-8 lg:pl-16 lg:pr-10 py-6 border-b md:border-b-0 md:border-r border-[#ECECEC]"
+          className="w-full md:w-1/2 h-[45vh] md:h-[calc(100vh-170px)] overflow-y-auto relative px-5 sm:px-8 lg:pl-10 lg:pr-10 py-6 border-b md:border-b-0 md:border-r border-[#ECECEC]"
         >
-          <div className="max-w-2xl mx-auto space-y-5">
+          {/* Floating Tool Shortcuts Toolbar — inside left pane, so it doesn't overlap right pane */}
+          {!isListening && (
+            <div className="hidden lg:flex flex-col gap-2 absolute left-2 top-6 z-20 bg-white/95 backdrop-blur-sm p-1.5 rounded-xl border border-[#FFEDD1] shadow-md text-[11px] font-bold text-[#4D2600]">
+              <button
+                type="button"
+                onClick={() => onSelectTool(activeTool === 'highlight' ? null : 'highlight')}
+                className={`p-2 rounded-lg flex flex-col items-center gap-1 transition ${
+                  activeTool === 'highlight'
+                    ? 'bg-[#FF6D3A] text-white'
+                    : 'hover:bg-[#FFF8F2] text-[#4D2600]'
+                }`}
+                title="Bôi đen chữ trên bài đọc để Highlight (Phím H)"
+              >
+                <Highlighter className="w-4 h-4" />
+                <span>Highlight</span>
+                <span className="text-[9px] opacity-75 font-normal">(H)</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => onSelectTool(activeTool === 'note' ? null : 'note')}
+                className={`p-2 rounded-lg flex flex-col items-center gap-1 transition ${
+                  activeTool === 'note'
+                    ? 'bg-[#FF6D3A] text-white'
+                    : 'hover:bg-[#FFF8F2] text-[#4D2600]'
+                }`}
+                title="Bôi đen chữ để lưu vào Ghi chú (Phím N)"
+              >
+                <FileText className="w-4 h-4" />
+                <span>Notes</span>
+                <span className="text-[9px] opacity-75 font-normal">(N)</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => onSelectTool(activeTool === 'vocab' ? null : 'vocab')}
+                className={`p-2 rounded-lg flex flex-col items-center gap-1 transition ${
+                  activeTool === 'vocab'
+                    ? 'bg-[#FF6D3A] text-white'
+                    : 'hover:bg-[#FFF8F2] text-[#4D2600]'
+                }`}
+                title="Bôi đen từ để tra cứu Cambridge Dictionary (Phím T)"
+              >
+                <BookOpen className="w-4 h-4" />
+                <span>Tra từ</span>
+                <span className="text-[9px] opacity-75 font-normal">(T)</span>
+              </button>
+
+              {highlightSnippets.length > 0 && (
+                <button
+                  type="button"
+                  onClick={() => setHighlightSnippets([])}
+                  className="p-1.5 rounded-lg text-[10px] text-[#FF3532] hover:bg-[#FFF1F1] transition"
+                  title="Xóa toàn bộ highlight"
+                >
+                  Xóa HL
+                </button>
+              )}
+            </div>
+          )}
+
+          <div className="max-w-2xl mx-auto space-y-5 lg:pl-12">
             {/* Title Header */}
             <div className="border-b border-[#FFEDD1] pb-3 flex items-start justify-between gap-3">
               <div>

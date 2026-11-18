@@ -712,22 +712,38 @@ export const YouPassCatalog: React.FC<YouPassCatalogProps> = ({
             </div>
           ) : (
             /* STANDARD SINGLE QUIZZES GRID */
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {displayedItems.map((test) => {
                 const isDone = completedQuizIds.has(test.id);
                 const partTag = (test.tags || []).find((t) =>
                   /passage|section|task/i.test(t.code || t.title)
                 );
-                const otherTags = (test.tags || []).filter((t) => t.id !== partTag?.id);
+                const sourceTag = (test.tags || []).find((t) =>
+                  /simulation|collect|cambridge|actual|pro|cam/i.test(t.code || t.title)
+                );
+                const qTypeTags = (test.tags || []).filter(
+                  (t) => t.id !== partTag?.id && t.id !== sourceTag?.id
+                );
+
+                // Color by passage/section number
+                const partBgColor = partTag?.title?.includes('1')
+                  ? 'bg-violet-600'
+                  : partTag?.title?.includes('2')
+                  ? 'bg-sky-600'
+                  : partTag?.title?.includes('3')
+                  ? 'bg-[#FF6D3A]'
+                  : partTag?.title?.includes('4')
+                  ? 'bg-emerald-600'
+                  : 'bg-[#4D2600]';
 
                 return (
                   <div
                     key={test.id}
-                    className="group bg-white rounded-2xl border border-[#FFEDD1] overflow-hidden shadow-2xs hover:shadow-md transition-all duration-200 flex flex-col relative"
+                    className="group bg-white rounded-2xl border border-[#FFEDD1] overflow-hidden shadow-sm hover:shadow-lg transition-all duration-200 flex flex-col"
                   >
-                    <div className="aspect-[342/195] relative w-full overflow-hidden bg-[#FFF1E5]">
+                    <div className="aspect-[342/190] relative w-full overflow-hidden bg-[#FFF1E5]">
                       {/* Views badge */}
-                      <div className="absolute left-2 top-2 z-10 px-2 py-0.5 rounded-full bg-black/60 backdrop-blur-xs text-white text-[10px] font-bold flex items-center gap-1">
+                      <div className="absolute left-2 top-2 z-10 px-2 py-0.5 rounded-full bg-black/60 backdrop-blur-sm text-white text-[10px] font-bold flex items-center gap-1">
                         <Eye className="w-3 h-3 text-amber-300" />
                         <span>{(test.total_submitted || 0).toLocaleString()} lượt</span>
                       </div>
@@ -740,7 +756,7 @@ export const YouPassCatalog: React.FC<YouPassCatalogProps> = ({
                       )}
 
                       {partTag && (
-                        <div className="absolute left-0 bottom-0 z-10 px-3 py-1 rounded-tr-xl bg-purple-600 text-white text-xs font-black">
+                        <div className={`absolute left-0 bottom-0 z-10 px-3 py-1 rounded-tr-xl ${partBgColor} text-white text-[11px] font-black`}>
                           {partTag.title}
                         </div>
                       )}
@@ -754,30 +770,34 @@ export const YouPassCatalog: React.FC<YouPassCatalogProps> = ({
                       />
                     </div>
 
-                    <div className="p-4 flex-1 flex flex-col justify-between space-y-3">
+                    <div className="p-4 flex-1 flex flex-col justify-between gap-3">
                       <div>
-                        <div className="flex items-center justify-between text-[10px] font-extrabold text-[#FF6D3A] uppercase">
+                        <div className="flex items-center justify-between text-[10px] font-extrabold text-[#8A8A8E] mb-1">
                           <span>ID #{test.id}</span>
-                          {test.time && <span>{test.time} phút</span>}
+                          {test.time && <span className="text-[#FF6D3A]">⏱ {test.time} phút</span>}
                         </div>
-                        <h4 className="font-extrabold text-sm text-[#1D1D1F] line-clamp-2 mt-0.5 group-hover:text-[#FF6D3A] transition">
+                        <h4 className="font-extrabold text-[13px] text-[#1D1D1F] line-clamp-2 leading-snug group-hover:text-[#FF6D3A] transition">
                           {test.title}
                         </h4>
                       </div>
 
-                      <div className="space-y-1">
-                        {otherTags.slice(0, 3).map((tg) => (
-                          <div
+                      <div className="flex flex-wrap gap-1">
+                        {sourceTag && (
+                          <span className="px-2 py-0.5 rounded-full bg-[#FFEDD1] text-[#4D2600] text-[10px] font-bold">
+                            {sourceTag.title}
+                          </span>
+                        )}
+                        {qTypeTags.slice(0, 2).map((tg) => (
+                          <span
                             key={tg.id}
-                            className="flex items-center gap-1.5 text-[11px] text-[#4D2600]"
+                            className="px-2 py-0.5 rounded-full bg-[#F3F4F6] text-[#374151] text-[10px] font-semibold"
                           >
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#FF6D3A] shrink-0" />
-                            <span className="truncate font-medium">{tg.title}</span>
-                          </div>
+                            {tg.title}
+                          </span>
                         ))}
                       </div>
 
-                      <div className="pt-2 grid grid-cols-2 gap-2 border-t border-[#ECECEC]">
+                      <div className="grid grid-cols-2 gap-2 pt-2 border-t border-[#F3F4F6]">
                         <button
                           type="button"
                           onClick={() =>
@@ -786,10 +806,10 @@ export const YouPassCatalog: React.FC<YouPassCatalogProps> = ({
                               practiceMode === 'dictation' ? 'dictation' : 'normal'
                             )
                           }
-                          className="py-1.5 px-3 rounded-full bg-[#FFF1E5] hover:bg-[#FFEBE0] text-[#FF6D3A] font-black text-xs transition border border-[#FFEDD1] flex items-center justify-center gap-1"
+                          className="py-2 px-3 rounded-full bg-[#FFF1E5] hover:bg-[#FFEBE0] text-[#FF6D3A] font-extrabold text-[11px] transition border border-[#FFEDD1] flex items-center justify-center gap-1"
                         >
                           <span>{practiceMode === 'dictation' ? 'Dictation' : 'Luyện đề'}</span>
-                          <span className="text-[9px] bg-blue-500 text-white px-1 rounded-full">
+                          <span className="text-[9px] bg-blue-500 text-white px-1 py-px rounded-full">
                             FREE
                           </span>
                         </button>
@@ -802,7 +822,7 @@ export const YouPassCatalog: React.FC<YouPassCatalogProps> = ({
                               practiceMode === 'dictation' ? 'dictation' : 'normal'
                             )
                           }
-                          className="py-1.5 px-3 rounded-full bg-[#FF6D3A] hover:bg-[#ff581d] text-white font-extrabold text-xs transition shadow-xs flex items-center justify-center gap-1"
+                          className="py-2 px-3 rounded-full bg-[#FF6D3A] hover:bg-[#ff581d] text-white font-extrabold text-[11px] transition shadow-sm flex items-center justify-center gap-1"
                         >
                           <span>Phòng thi</span>
                           <ChevronRight className="w-3.5 h-3.5" />
